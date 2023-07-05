@@ -19,19 +19,32 @@ async function dataRoute(fastify, options) {
   });
 
   //create sensor info
-  fastify.post("/create", async (request, reply) => {
-    const { chipid, name, location } = request.body;
-    try {
-      const result = await sensorController.insertSensorInfo(
-        chipid,
-        name,
-        location
-      );
-      reply.send(result);
-    } catch (error) {
-      console.error("Error inserting sensor info:", error);
-      reply.code(500).send({ success: false, error: error.message });
-    }
+  fastify.post("/create", {
+    schema: {
+      body: {
+        type: "object",
+        properties: {
+          chipid: { type: "number" },
+          name: { type: "string" },
+          location: { type: "string" },
+        },
+        required: ["chipid", "name", "location"],
+      },
+    },
+    handler: async (request, reply) => {
+      const { chipid, name, location } = request.body;
+      try {
+        const result = await sensorController.insertSensorInfo(
+          chipid,
+          name,
+          location
+        );
+        reply.send(result);
+      } catch (error) {
+        console.error("Error inserting sensor info:", error);
+        reply.code(500).send({ success: false, error: error.message });
+      }
+    },
   });
 
   //update sensor info

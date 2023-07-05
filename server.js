@@ -7,6 +7,7 @@ const db = require("./db");
 
 //cors
 fastify.register(cors, {
+  //insert multiple origins, http://127.0.0.1:5173/ is for svelte app
   origin: "*",
 });
 
@@ -16,6 +17,7 @@ fastify.register(require("./routes/data"));
 db.sync();
 
 // Run the server!
+// fastify.listen({ path: "passenger" }, function (err, address) {
 fastify.listen({ port: 666 }, function (err, address) {
   if (err) {
     fastify.log.error(err);
